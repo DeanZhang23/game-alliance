@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #08110d;
+  --color-panel: #121f19;
+  --color-line: #2a4034;
+  --color-lime: #e6ff4d;
+  --color-clay: #e07a4c;
+  --color-paper: #f3ecdf;
+  --color-mist: #b7c4bb;
+  --color-dim: #7e9187;
+  --font-sans: var(--font-app-sans), "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+  --font-display: var(--font-app-display), "Songti SC", "Noto Serif SC", "Source Han Serif SC", serif;
+  --font-mono: var(--font-app-mono), ui-monospace, monospace;
+}
+
+html {
+  background: var(--color-ink);
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 10% -10%, rgba(230, 255, 77, 0.09), transparent 42%),
+    linear-gradient(rgba(243, 236, 223, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(243, 236, 223, 0.035) 1px, transparent 1px),
+    var(--color-ink);
+  background-size: auto, 28px 28px, 28px 28px, auto;
+  color: var(--color-paper);
+  font-family: var(--font-sans);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 40;
+  height: 3px;
+  background: var(--color-lime);
+}
+
+::selection {
+  background: var(--color-lime);
+  color: var(--color-ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-lime);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
