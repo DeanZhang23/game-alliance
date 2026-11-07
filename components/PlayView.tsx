@@ -39,17 +39,21 @@ export function PlayView({ id }: { id: string }) {
   const game = catalog ?? draft;
 
   if (!checked) {
-    return <p className="mx-auto max-w-6xl px-4 py-12 text-mist md:px-6">{t.play.loading}</p>;
+    return <p className="page-wrap text-mist">{t.play.loading}</p>;
   }
 
   if (!game) {
     return (
-      <div className="mx-auto max-w-6xl px-4 py-12 md:px-6">
-        <h1 className="font-display text-5xl">{t.play.missing}</h1>
-        <p className="mt-3 text-mist">{t.play.missingBody}</p>
-        <Link href="/games" className="mt-6 inline-block text-lime">
-          {t.play.back}
-        </Link>
+      <div className="page-wrap">
+        <section className="pixel-panel max-w-xl">
+          <p className="font-pixel text-[10px] text-clay">404</p>
+          <h1 className="hero-title">{t.play.missing}</h1>
+          <p className="lead">{t.play.missingBody}</p>
+          <Link href="/games" className="pixel-btn mt-5">
+            <span className="pixel-arrow-left" aria-hidden />
+            {t.play.back}
+          </Link>
+        </section>
       </div>
     );
   }
@@ -78,20 +82,19 @@ export function PlayView({ id }: { id: string }) {
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 md:px-6">
-      <Link href="/games" className="font-mono text-xs tracking-[0.14em] text-dim uppercase">
-        ← {t.play.back}
+    <div className="page-wrap">
+      <Link href="/games" className="pixel-btn pixel-btn-ghost pixel-btn-sm">
+        <span className="pixel-arrow-left" aria-hidden />
+        {t.play.back}
       </Link>
-      <div className="mt-4 flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <p className="font-mono text-xs tracking-[0.16em] text-lime uppercase">{t.mode[game.mode]}</p>
-          <h1 className="mt-2 font-display text-5xl text-paper">{game.title[lang]}</h1>
-          <p className="mt-3 max-w-2xl text-mist">{game.pitch[lang]}</p>
-          <p className="mt-2 text-sm text-dim">
-            {t.play.creator} · {game.creator[lang]}
-            {game.source === "draft" ? ` · ${t.play.draft}` : ""}
-          </p>
-        </div>
+      <div className="mt-5">
+        <p className={game.mode === "idle" ? "chip chip-mana" : "chip"}>{t.mode[game.mode]}</p>
+        <h1 className="hero-title">{game.title[lang]}</h1>
+        <p className="lead">{game.pitch[lang]}</p>
+        <p className="mt-3 text-sm font-bold text-dim">
+          {t.play.creator} · {game.creator[lang]}
+          {game.source === "draft" ? ` · ${t.play.draft}` : ""}
+        </p>
       </div>
 
       <div className="mt-6">
@@ -111,6 +114,7 @@ export function PlayView({ id }: { id: string }) {
 
       <div className="mt-4 grid gap-3 md:grid-cols-2">
         <ActionCard
+          tone="like"
           pressed={flags.like}
           label={flags.like ? t.play.liked : t.play.like}
           detail={fill(t.play.split, {
@@ -121,6 +125,7 @@ export function PlayView({ id }: { id: string }) {
           disabled={flags.like}
         />
         <ActionCard
+          tone="share"
           pressed={flags.share}
           label={flags.share ? t.play.shared : t.play.share}
           detail={`${fill(t.play.split, {
@@ -132,7 +137,8 @@ export function PlayView({ id }: { id: string }) {
         />
       </div>
       {qualified ? (
-        <p className="mt-4 rounded-2xl border border-lime/50 bg-lime/10 px-4 py-3 text-sm text-paper">
+        <p className="quest-clear">
+          <span className="font-pixel mr-2 text-[10px]">1UP</span>
           {t.play.qualified}{" "}
           {fill(t.play.split, {
             creator: formatPoint(playSplit.creatorPoints),
@@ -140,7 +146,7 @@ export function PlayView({ id }: { id: string }) {
           })}
         </p>
       ) : null}
-      <p className="mt-3 text-sm text-dim">{t.play.actionsNote}</p>
+      <p className="mt-3 text-sm leading-relaxed text-dim">{t.play.actionsNote}</p>
     </div>
   );
 }
@@ -151,12 +157,14 @@ function ActionCard({
   onClick,
   disabled,
   pressed,
+  tone,
 }: {
   label: string;
   detail: string;
   onClick: () => void;
   disabled: boolean;
   pressed: boolean;
+  tone: "like" | "share";
 }) {
   return (
     <button
@@ -164,10 +172,10 @@ function ActionCard({
       onClick={onClick}
       disabled={disabled}
       aria-pressed={pressed}
-      className="rounded-2xl border border-line bg-panel px-4 py-4 text-left disabled:opacity-80"
+      className={`action-pad ${tone === "like" ? "tone-like" : "tone-share"}${pressed ? " is-down" : ""}`}
     >
-      <span className="block font-display text-2xl text-paper">{label}</span>
-      <span className="mt-1 block text-sm text-mist">{detail}</span>
+      <span className="action-face">{label}</span>
+      <span className="action-detail">{detail}</span>
     </button>
   );
 }

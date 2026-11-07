@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRef, useState } from "react";
+import { HudStat, PageIntro } from "@/components/Chrome";
 import { PhaserStage } from "@/components/PhaserStage";
 import { saveDraft } from "@/lib/drafts";
 import { useI18n } from "@/lib/i18n";
@@ -35,19 +36,17 @@ export function CreateView() {
   }
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 md:px-6">
-      <p className="font-mono text-xs tracking-[0.18em] text-lime uppercase">{t.create.kicker}</p>
-      <h1 className="mt-3 max-w-3xl font-display text-5xl leading-tight text-paper">{t.create.title}</h1>
-      <p className="mt-4 max-w-2xl text-mist">{t.create.lead}</p>
+    <div className="page-wrap">
+      <PageIntro kicker={t.create.kicker} title={t.create.title} lead={t.create.lead} />
 
       <form
-        className="mt-8 max-w-3xl"
+        className="pixel-panel mt-8 max-w-3xl"
         onSubmit={(event) => {
           event.preventDefault();
           void generate();
         }}
       >
-        <label htmlFor="idea" className="font-mono text-xs tracking-[0.14em] text-dim uppercase">
+        <label htmlFor="idea" className="field-label">
           {t.create.label}
         </label>
         <textarea
@@ -57,30 +56,31 @@ export function CreateView() {
           onChange={(event) => setIdea(event.target.value)}
           placeholder={t.create.placeholder}
           rows={4}
-          className="mt-2 w-full resize-y rounded-2xl border border-line bg-panel px-4 py-3 text-paper outline-none placeholder:text-dim"
+          className="pixel-field"
         />
-        {error ? <p className="mt-2 text-sm text-clay">{t.create.error}</p> : null}
+        {error ? <p className="mt-2 text-sm font-bold text-clay">{t.create.error}</p> : null}
         <div className="mt-4 flex flex-wrap items-center gap-4">
-          <button type="submit" disabled={pending} className="rounded-full bg-clay px-5 py-2.5 text-sm font-medium text-ink disabled:opacity-60">
+          <button type="submit" disabled={pending} className="pixel-btn pixel-btn-clay">
             {pending ? t.create.working : t.create.submit}
           </button>
-          <p className="text-sm text-dim">{t.create.note}</p>
+          <p className="max-w-sm text-sm leading-relaxed text-dim">{t.create.note}</p>
         </div>
       </form>
 
       {draft ? (
-        <section ref={resultRef} className="mt-10" aria-label={t.create.result}>
+        <section ref={resultRef} className="scroll-target mt-10" aria-label={t.create.result}>
           <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-            <h2 className="font-display text-3xl">{t.create.result}</h2>
-            <Link href={`/play/${draft.id}`} className="rounded-full border border-lime px-4 py-2 text-sm text-lime">
+            <h2 className="text-3xl font-black">{t.create.result}</h2>
+            <Link href={`/play/${draft.id}`} className="pixel-btn pixel-btn-sm">
+              <span className="pixel-arrow" aria-hidden />
               {t.create.open}
             </Link>
           </div>
-          <dl className="mb-4 grid gap-3 sm:grid-cols-4">
-            <Stat label={t.create.mode} value={t.mode[draft.mode]} />
-            <Stat label={t.create.click} value={String(draft.clickValue)} />
-            <Stat label={t.create.idle} value={`${draft.idlePerSecond} ${t.create.perSecond}`} />
-            <Stat label={t.create.goal} value={String(draft.goal)} />
+          <dl className="mb-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+            <HudStat label={t.create.mode} value={t.mode[draft.mode]} />
+            <HudStat label={t.create.click} value={String(draft.clickValue)} numeric />
+            <HudStat label={t.create.idle} value={`${draft.idlePerSecond} ${t.create.perSecond}`} />
+            <HudStat label={t.create.goal} value={String(draft.goal)} numeric />
           </dl>
           <PhaserStage
             game={draft}
@@ -95,15 +95,6 @@ export function CreateView() {
           />
         </section>
       ) : null}
-    </div>
-  );
-}
-
-function Stat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl border border-line bg-panel px-4 py-3">
-      <dt className="font-mono text-[11px] tracking-[0.14em] text-dim uppercase">{label}</dt>
-      <dd className="mt-1 text-lg text-paper">{value}</dd>
     </div>
   );
 }
