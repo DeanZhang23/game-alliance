@@ -1,37 +1,45 @@
 "use client";
 
 import Link from "next/link";
+import { PixelMark } from "@/components/PixelMark";
 import { useI18n } from "@/lib/i18n";
+
+const NOTE_TONES = ["chip-lime", "chip-mana", "chip-clay"] as const;
 
 export function HomeView() {
   const { t } = useI18n();
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 md:px-6 md:py-16">
-      <p className="font-mono text-xs tracking-[0.18em] text-lime uppercase">{t.home.kicker}</p>
-      <div className="mt-5 grid items-start gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(18rem,0.8fr)]">
+    <div className="page-wrap">
+      <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1.35fr)_minmax(18rem,0.9fr)]">
         <div>
-          <h1 className="max-w-4xl font-display text-5xl leading-[1.08] text-paper md:text-7xl">{t.home.title}</h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-mist">{t.home.lead}</p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/create" className="rounded-full bg-lime px-5 py-2.5 text-sm font-medium text-ink">
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="mark-screen">
+              <PixelMark />
+            </div>
+            <p className="kicker">{t.home.kicker}</p>
+          </div>
+          <h1 className="hero-title">{t.home.title}</h1>
+          <p className="lead">{t.home.lead}</p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/create" className="pixel-btn">
               {t.home.ctaCreate}
             </Link>
-            <Link href="/games" className="rounded-full border border-line px-5 py-2.5 text-sm text-paper">
+            <Link href="/games" className="pixel-btn pixel-btn-ghost">
               {t.home.ctaGames}
             </Link>
           </div>
         </div>
-        <section className="rounded-3xl border border-line bg-panel p-5" aria-labelledby="loop-title">
-          <h2 id="loop-title" className="font-mono text-xs tracking-[0.18em] text-dim uppercase">
+        <section className="pixel-panel" aria-labelledby="loop-title">
+          <h2 id="loop-title" className="text-xs font-bold tracking-wide text-gold uppercase">
             {t.home.loopTitle}
           </h2>
-          <ol className="mt-4">
+          <ol className="mt-4 flex flex-col gap-3">
             {t.home.steps.map((step, index) => (
-              <li key={step.name} className="grid grid-cols-[auto_1fr] gap-3 border-t border-line py-3 first:border-t-0">
-                <span className="font-mono text-xs text-lime">{String(index + 1).padStart(2, "0")}</span>
-                <div>
-                  <p className="font-display text-2xl leading-none">{step.name}</p>
+              <li key={step.name} className="flex items-start gap-3">
+                <span className="step-index font-pixel">{String(index + 1).padStart(2, "0")}</span>
+                <div className="min-w-0 pt-0.5">
+                  <p className="text-2xl leading-none font-black">{step.name}</p>
                   <p className="mt-1 text-sm leading-relaxed text-mist">{step.text}</p>
                 </div>
               </li>
@@ -39,10 +47,11 @@ export function HomeView() {
           </ol>
         </section>
       </div>
-      <section className="mt-12 grid gap-4 md:grid-cols-3">
-        {t.home.notes.map((note) => (
-          <article key={note.title} className="rounded-3xl border border-line bg-panel/70 p-5">
-            <h2 className="font-display text-2xl">{note.title}</h2>
+      <section className="mt-8 grid gap-4 md:grid-cols-3">
+        {t.home.notes.map((note, index) => (
+          <article key={note.title} className="pixel-card">
+            <span className={`chip ${NOTE_TONES[index] ?? "chip-lime"}`}>{String(index + 1).padStart(2, "0")}</span>
+            <h2 className="mt-3 text-2xl font-black">{note.title}</h2>
             <p className="mt-2 text-sm leading-relaxed text-mist">{note.text}</p>
           </article>
         ))}

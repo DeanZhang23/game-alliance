@@ -1,28 +1,21 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, Noto_Sans_SC, Noto_Serif_SC } from "next/font/google";
+import { Noto_Sans_SC, Press_Start_2P } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import { Nav } from "@/components/Nav";
 import { LanguageProvider } from "@/lib/i18n";
 import "./globals.css";
 
 const sans = Noto_Sans_SC({
-  weight: ["400", "500", "700"],
+  weight: ["400", "700", "900"],
   subsets: ["latin"],
   variable: "--font-app-sans",
   display: "swap",
 });
 
-const display = Noto_Serif_SC({
-  weight: ["600", "700"],
+const pixel = Press_Start_2P({
+  weight: "400",
   subsets: ["latin"],
-  variable: "--font-app-display",
-  display: "swap",
-});
-
-const mono = IBM_Plex_Mono({
-  weight: ["400", "500"],
-  subsets: ["latin"],
-  variable: "--font-app-mono",
+  variable: "--font-pixel-face",
   display: "swap",
 });
 
@@ -38,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN">
-      <body className={`${sans.variable} ${display.variable} ${mono.variable} antialiased`}>
+      <body className={`${sans.variable} ${pixel.variable}`}>
         <LanguageProvider>
           <div className="flex min-h-screen flex-col">
             <Nav />
